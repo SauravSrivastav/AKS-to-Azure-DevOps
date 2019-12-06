@@ -1,20 +1,25 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1-alpine as build
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
 WORKDIR /src
-COPY ["src/Site.csproj", "src/"]
-RUN dotnet restore "src/Site.csproj"
+
+COPY Site.csproj .
+RUN dotnet restore
+
 COPY . .
-WORKDIR "/src/src"
-RUN dotnet build "Site.csproj" -c Release -o /app/build
+RUN dotnet build -c Release
 
-FROM build AS publish
-RUN dotnet publish "Site.csproj" -c Release -o /app/publish
+# RUN dotnet test ...
 
-FROM base AS final
+RUN dotnet publish -c Release -o /dist
+
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1-alpine
+
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Site.dll"]
+
+ENV ASPNETCORE_ENVIRONMENT Production
+ENV ASPNETCORE_URLS http://+:80
+EXPOSE 80
+
+COPY --from=build /dist /app
+CMD ["dotnet", "Site.dll"]
