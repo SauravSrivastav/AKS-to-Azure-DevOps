@@ -26,26 +26,9 @@ kind: Service
 metadata:
   name: net-app
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: net-app
   ports:
   - port: 80
     targetPort: 80
----
-apiVersion: networking.k8s.io/v1beta1
-# < 1.13: apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: net-app
-  annotations:
-    kubernetes.io/ingress.class: addon-http-application-routing
-spec:
-  rules:
-  - host: net-app.AKSURL
-    http:
-      paths:
-      - backend:
-          serviceName: net-app
-          servicePort: 80
-        path: /
