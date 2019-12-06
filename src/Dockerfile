@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1-alpine as build
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine as build
 
 WORKDIR /src
 
@@ -13,7 +13,7 @@ RUN dotnet build -c Release
 RUN dotnet publish -c Release -o /dist
 
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.1-alpine
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine
 
 WORKDIR /app
 
