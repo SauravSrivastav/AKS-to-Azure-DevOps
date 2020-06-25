@@ -24,7 +24,7 @@ jobs:
     
     # Container build and push to a Azure Container registry (ACR)
     - run: |
-        docker build --file **/tree/master/src/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/net-app:${{ github.sha }} .
+        docker build --file ~/Dockerfile -t ${{ env.REGISTRY_NAME }}.azurecr.io/net-app:${{ github.sha }} 
         docker push ${{ env.REGISTRY_NAME }}.azurecr.io/net-app:${{ github.sha }}
     
     # Set the target Azure Kubernetes Service (AKS) cluster. 
