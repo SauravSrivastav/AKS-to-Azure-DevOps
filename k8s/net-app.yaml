@@ -27,7 +27,7 @@ kind: Service
 metadata:
   name: net-app
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: net-app
   ports:
